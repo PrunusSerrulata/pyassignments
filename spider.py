@@ -1,7 +1,10 @@
+import json
+import random
+import re
+import time
+
 import requests as req
 from bs4 import BeautifulSoup as bs
-import re
-import json
 
 poems = []
 avaliable_tags = ['写景', '咏物', '春天', '夏天', '秋天', '冬天',\
@@ -29,8 +32,10 @@ for i in range(1, num + 1):
             if tag.text in avaliable_tags: tags.append(tag.text)
         poems.append({"title": title, "author": author, "era": era, "content": content, "tags": tags})
     print(" Done.")
+    wait_sec = round(random.uniform(1, 4), 2)
+    print("Waiting for " + str(wait_sec) + " sec...")
+    time.sleep(wait_sec)
 
-# print(json.dumps(poems, ensure_ascii=False, indent=4))
 with open(r".\poems.json", "w", encoding="utf-8") as f:
     f.write(json.dumps(poems, ensure_ascii=False, indent=4))
 
