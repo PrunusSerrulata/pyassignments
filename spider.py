@@ -1,3 +1,12 @@
+# A spider to get ancient Chinese poems from gushiwen.org.
+# 从 gushiwen.org 古诗文网上爬取古诗的爬虫程序。
+
+# Fetch the title, author's name, era, content and tags of each poem, parsing them into json.
+# 爬取每首诗的标题，作者，时代（朝代），内容和标签，解析为json格式。
+
+# Notice: Up to now, access to pages after page 10 is still prohibited.
+# 注意：第十页之后的页面依旧禁止访问。
+
 import json
 import random
 import re
@@ -31,7 +40,7 @@ for i in range(1, num + 1):
         for tag in _tags:
             if tag.text in avaliable_tags: tags.append(tag.text)
         poems.append({"title": title, "author": author, "era": era, "content": content, "tags": tags})
-    print(" Done.")
+    print(" Done with adding " + str(len(_poems)) + " poems.")
     wait_sec = round(random.uniform(1, 4), 2)
     print("Waiting for " + str(wait_sec) + " sec...")
     time.sleep(wait_sec)
