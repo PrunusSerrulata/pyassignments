@@ -22,6 +22,9 @@ for poemnum in range(beg, end + 1):
     poemres = req.get("http://www.haoshiwen.org/view.php?id=" + str(poemnum))
     poemres.encoding = "utf-8"
     spr = bs(poemres.text, "lxml")
+    if len(spr.select('div[class="main3"]')[0].select('div[class="shileft"]')) <= 0:
+        print("该诗不存在")
+        continue
     title = re.sub(r"[\f\n\r\s]", "", spr.select('div[class="main3"]')[0].select('div[class="shileft"]')[0].select('div[class="son1"]')[0].text)
     print("标题: " + title, end=" ")
     _cont, cont = spr.select('div[class="main3"]')[0].select('div[class="shileft"]')[0].select('div[class="son2"]')[0].find_all('p')[3:-1], ""
