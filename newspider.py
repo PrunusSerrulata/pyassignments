@@ -24,7 +24,6 @@ for poemnum in range(beg, end + 1):
     spr = bs(poemres.text, "lxml")
     if len(spr.select('div[class="main3"]')[0].select('div[class="shileft"]')) <= 0:
         print("该诗不存在")
-        continue
     else:
         title = re.sub(r"[\f\n\r\s]", "", spr.select('div[class="main3"]')[0].select('div[class="shileft"]')[0].select('div[class="son1"]')[0].text)
         print("标题: " + title, end=" ")
