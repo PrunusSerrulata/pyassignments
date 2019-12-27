@@ -8,14 +8,17 @@ from bs4 import BeautifulSoup as bs
 
 count = -1
 while count < 1:
-    beg, end = map(int, input("输入要爬取诗词的序号范围，上下界以空格分隔: ").split())
+    beg, end = map(int, input("输入要爬取诗词的序号范围, 上下界以空格分隔: ").split())
     count = end - beg + 1
     if count < 1:
         print("无效范围。\n")
 
-poems = []
+mode = input("是否覆写文件?(输入Y/y为是, 其他为否): ")
+rewrite = mode.lower() == "y"
+
+f = open(r".\poems.txt", "w" if rewrite else "a", encoding="utf-8")
 for poemnum in range(beg, end + 1):
-    print("爬取第 " + str(poemnum) + " 首诗(" + str(poemnum - beg + 1) + " / " + str(count) + ")中...", end=" ")
+    print("爬取第 " + str(poemnum) + " 号诗(" + str(poemnum - beg + 1) + " / " + str(count) + ")中...", end=" ")
     poemres = req.get("http://www.haoshiwen.org/view.php?id=" + str(poemnum))
     poemres.encoding = "utf-8"
     spr = bs(poemres.text, "lxml")
@@ -32,17 +35,14 @@ for poemnum in range(beg, end + 1):
             break
         valid = True
     if valid:
-        poems.append({"title": title, "content": cont})
-        print("完成",)
+        f.write(title + ":" + cont + "\n")
+        print("完成")
     else:
         print("非五言诗，丢弃")
     
     if poemnum != end:
-        wait_sec = round(random.uniform(1, 3), 2)
+        wait_sec = round(random.uniform(1, 2), 2)
         print("等待 " + str(wait_sec) + " 秒...")
         time.sleep(wait_sec)
-
-with open(r".\poems.json", "w", encoding="utf-8") as f:
-    f.write(json.dumps(poems, ensure_ascii=False, indent=4))
 
 print("\n完成。")
